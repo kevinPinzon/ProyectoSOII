@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 
@@ -116,7 +117,32 @@ public class ServerNodeImpl extends UnicastRemoteObject implements ServerNode{
         TreePath camino = find((DefaultMutableTreeNode)directorio.getRoot(),padre);
         DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode)camino.getLastPathComponent());
         int servidor = 1;
-        selectedNode.add(new DefaultMutableTreeNode(new NodoArbol(nombre,servidor,'a')));
+        selectedNode.add(new DefaultMutableTreeNode(new NodoArbol(nombre,Text,servidor,'a')));
+        new File("directorio.bin").delete();
+        File archivo = null;
+        try{
+            archivo = new File ("directorio.bin");            
+            FileOutputStream salida = new FileOutputStream(archivo);
+            ObjectOutputStream objeto = new ObjectOutputStream(salida);
+            objeto.writeObject(directorio);
+            objeto.flush();
+            objeto.close();
+            salida.close();
+            
+        }catch(Exception ex3){
+        
+        }
+        //codigo para guardar en el data node
+        
+       return true;
+    }
+    
+    @Override
+    public boolean editarArchivo(String nombre, String Text, DefaultMutableTreeNode padre) throws RemoteException {
+        //sincroniza el servidor con la vista en el cliente
+        TreePath camino = find((DefaultMutableTreeNode)directorio.getRoot(),padre);
+        DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode)camino.getLastPathComponent());
+         ((NodoArbol)selectedNode.getUserObject()).setTexto(Text); 
         new File("directorio.bin").delete();
         File archivo = null;
         try{
@@ -184,8 +210,17 @@ public class ServerNodeImpl extends UnicastRemoteObject implements ServerNode{
     }
 
     @Override
-    public String verArchivo(String nombre) throws RemoteException {
-       return "";
+    public String verArchivo(String nombre,DefaultMutableTreeNode nodo) throws RemoteException {
+        String textDevolver= "";
+        try{
+        TreePath camino = find((DefaultMutableTreeNode)directorio.getRoot(),nodo);
+        DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode)camino.getLastPathComponent());
+        textDevolver = ((NodoArbol)selectedNode.getUserObject()).getTexto();
+        
+        }catch(Exception ex){
+            
+        }
+        return textDevolver;
     }
     
     @Override
@@ -194,7 +229,7 @@ public class ServerNodeImpl extends UnicastRemoteObject implements ServerNode{
     }
      private static void iniciar(){
         
-       String host = "169.254.235.211";//"192.168.56.1"
+       String host = "192.168.40.118";//"192.168.56.1"
         try {
             // create on port 1099
             Registry registry = LocateRegistry.createRegistry(1099);

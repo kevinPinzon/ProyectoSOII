@@ -15,19 +15,36 @@ public class NodoArbol implements Serializable{
     private String nombre;
     private int dataServer;
     private char type;
+    private String texto;
 
     public NodoArbol(String nombre, int dataServer, char type) {
         this.nombre = nombre;
         this.dataServer = dataServer;
         this.type = type;
     }
+    
+    public NodoArbol(String nombre,String texto, int dataServer, char type) {
+        this.nombre = nombre;
+        this.dataServer = dataServer;
+        this.type = type;
+        this.texto = texto;
+    }
 
     public String getNombre() {
         return nombre;
     }
+    
+    public String getTexto(){
+        return texto;
+    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public void setTexto(String texto)
+    {
+        this.texto = texto;
     }
 
     public int getDataServer() {

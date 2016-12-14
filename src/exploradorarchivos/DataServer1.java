@@ -52,7 +52,7 @@ public class DataServer1 extends UnicastRemoteObject implements DataServer {
         }
         //POrque el Dataserver1 se debe encargar de escribir la replica
         try {
-            Registry reg3 = LocateRegistry.getRegistry("169.254.235.211",1101);
+            Registry reg3 = LocateRegistry.getRegistry("192.168.40.118",1101);
             replicadataserver1 = (DataServer) reg3.lookup("ReplicaDataServer1");
             System.out.println("Replica Data server 1 conectado");
         }catch(Exception e){

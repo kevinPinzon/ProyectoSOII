@@ -218,6 +218,36 @@ public class GUI extends javax.swing.JFrame {
 
     private void abrirArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirArchivoActionPerformed
         // TODO add your handling code here:
+        String msg = "";
+       try {
+           msg = mensaje.verArchivo(seleccionado.getNombre(),nodo_seleccionado2);
+           String [] partes = ((NodoArbol)nodo_seleccionado2.getUserObject()).getNombre().split("/");
+        JTextField nameField = new JTextField(partes[partes.length-1]);
+      JTextArea contentField = new JTextArea(msg,10,25);
+      nameField.setEditable(false);
+      JPanel myPanel = new JPanel();
+      myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+      myPanel.add(new JLabel("Nombre:"));
+      myPanel.add(nameField);      
+      myPanel.add(new JLabel("Contenido:"));
+      myPanel.add(contentField);
+        int result = JOptionPane.showConfirmDialog(null, myPanel, 
+               "Ingrese el nombre y contenido del archivo", JOptionPane.OK_CANCEL_OPTION);
+      if (result == JOptionPane.OK_OPTION) {
+           try {
+            mensaje.editarArchivo(((NodoArbol)nodo_seleccionado2.getUserObject()).getNombre(),contentField.getText(),nodo_seleccionado2);
+            cargarArbol();
+        } catch (RemoteException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
+      
+            cargarArbol();
+        } catch (Exception ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_abrirArchivoActionPerformed
 
     /**
